@@ -437,11 +437,12 @@
   /* AFILIADOS */
   .afiliados {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 14px;
     margin-bottom: 28px;
   }
-  @media(max-width: 480px) { .afiliados { grid-template-columns: 1fr; } }
+  @media(max-width: 680px) { .afiliados { grid-template-columns: 1fr; } }
+  .btn-rv { background: #FFFFFF; color: var(--negro); }
 
   .afiliado-card {
     background: var(--negro-card);
@@ -748,9 +749,37 @@
         <div class="afiliado-desc">Fondos indexados globales con <strong>comisiones mínimas</strong> para inversores en España.</div>
         <a href="https://newapp.myinvestor.es/do/signup?promotionalCode=ANVVA" target="_blank" class="btn-afiliado btn-mi">EMPEZAR A INVERTIR →</a>
       </div>
+      <div class="afiliado-card">
+        <div class="afiliado-tag">Banco para tus 4 Cuentas</div>
+        <div class="afiliado-nombre">Revolut</div>
+        <div class="afiliado-desc">Abre tus 4 cajones fácilmente. <strong>Sin comisiones, desde el móvil</strong> en minutos.</div>
+        <a href="https://revolut.com/referral/?referral-code=rubendinnf!MAR1-26-AR-CL1H-CRY&geo-redirect" target="_blank" class="btn-afiliado btn-rv">ABRIR CUENTA GRATIS →</a>
+      </div>
     </div>
 
     <button class="btn-reset" onclick="resetear()">↩ RECALCULAR CON OTROS DATOS</button>
+
+    <!-- DIAGNÓSTICO EMERGENCIA -->
+    <div id="diagEmergencia" style="display:none;">
+      <div style="background:rgba(224,48,48,0.08);border:1.5px solid var(--rojo);border-radius:14px;padding:22px 20px;margin-bottom:24px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--rojo);letter-spacing:0.5px;margin-bottom:6px;">⚠️ MODO EMERGENCIA ACTIVADO</div>
+        <p style="font-size:13px;color:#CCC;line-height:1.7;font-weight:600;margin-bottom:16px;">Tus gastos fijos superan el 65% de tu nómina. El sistema de los 4 cajones necesita margen para funcionar. Pero eso no significa que estés atrapado. Significa que antes de distribuir, hay que operar. Aquí tienes el plan:</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:#1A1A1A;border-radius:10px;padding:14px 16px;border-left:3px solid var(--rojo);">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--rojo);margin-bottom:4px;">PASO 1 — AUDITA TUS GASTOS FIJOS</div>
+            <div style="font-size:12px;color:#888;font-weight:600;line-height:1.6;">Identifica qué gasto fijo puedes reducir o eliminar este mes. Seguro del coche, gimnasio, suscripciones activas que no usas. Un recorte de 100€ en gastos fijos vale más que 100€ extra de sueldo.</div>
+          </div>
+          <div style="background:#1A1A1A;border-radius:10px;padding:14px 16px;border-left:3px solid var(--amarillo);">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--amarillo);margin-bottom:4px;">PASO 2 — APLICA EL SISTEMA CON LO QUE TIENES</div>
+            <div style="font-size:12px;color:#888;font-weight:600;line-height:1.6;">Aunque el margen sea pequeño, empieza. Aunque solo puedas destinar 30€ al cajón colchón, hazlo. La automatización del hábito vale más que la cantidad. Los números de arriba son tu punto de partida real.</div>
+          </div>
+          <div style="background:#1A1A1A;border-radius:10px;padding:14px 16px;border-left:3px solid var(--cajon2);">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--cajon2);margin-bottom:4px;">PASO 3 — PRIORIZA EL COLCHÓN MÍNIMO</div>
+            <div style="font-size:12px;color:#888;font-weight:600;line-height:1.6;">Con estructura de gastos alta, el fondo de emergencia es tu prioridad absoluta. Sin colchón, cualquier imprevisto destruye cualquier avance. Aunque sea lento, construye ese escudo primero.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="nota-legal">
       Esta calculadora es una herramienta educativa. No constituye asesoramiento financiero. Consulta con un profesional antes de tomar decisiones de inversión.
@@ -790,15 +819,9 @@
     }
 
     const pctGastos = (gastosFijos / nomina) * 100;
-    const alerta = document.getElementById('alertaEstructura');
-
-    if (pctGastos > 65) {
-      alerta.style.display = 'block';
-      document.getElementById('resultados').style.display = 'none';
-      return;
-    } else {
-      alerta.style.display = 'none';
-    }
+    const alertaEl = document.getElementById('alertaEstructura');
+    alertaEl.style.display = 'none';
+    const modoEmergencia = pctGastos > 65;
 
     // CAJÓN 1 — Supervivencia
     const c1 = gastosFijos;
@@ -903,6 +926,7 @@
     // Mostrar resultados
     const res = document.getElementById('resultados');
     res.style.display = 'block';
+    document.getElementById('diagEmergencia').style.display = modoEmergencia ? 'block' : 'none';
     res.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Ocultar input section
